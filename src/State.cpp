@@ -167,20 +167,39 @@ std::ostream& operator<<(std::ostream& os, const Weights& w) {
 Type State::closestEnemyType()
 {
     int x=19,y=19;
-	
-	for(int i=0;i<units.size();++i)
-	{
-		for(int j=0;j<units[i].size();++j)
-		{
-			if(units[j][i].is_enemy && distance(0,0,x,y)>distance(0,0,j,i))
-			{
-				x=j;
-				y=i;
-			}
-		}
-	}
-    
-    
-    
+
+    for(int i=0;i<units.size();++i)
+    {
+        for(int j=0;j<units[i].size();++j)
+        {
+            if(units[j][i].is_enemy && distance(0,0,x,y)>distance(0,0,j,i))
+            {
+                x=j;
+                y=i;
+            }
+        }
+    }
     return units[x][y].type;
+}
+
+int State::getAllyUnitSize(Type t)
+{
+    switch(t)
+    {
+        case EMPTY: return -1; break;
+        case ROCK: return ar; break;
+        case PAPER: return ap; break;
+        case SCISSORS: return as; break;
+    }
+}
+
+int State::getEnemyUnitSize(Type t)
+{
+    switch(t)
+    {
+        case EMPTY: return -1; break;
+        case ROCK: return er; break;
+        case PAPER: return ep; break;
+        case SCISSORS: return es; break;
+    }
 }

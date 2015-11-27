@@ -116,7 +116,11 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
 
     Type closestEnemy = state.closestEnemyType();
 
-    if (closestEnemy != EMPTY) {
+    if (closestEnemy != EMPTY &&
+        state.getAllyUnitSize(closestEnemy) <
+        state.getAllyUnitSize(getBeater(closestEnemy)) +
+        state.getAllyUnitSize(getWinner(closestEnemy)))
+    {
         auto ans = produce(getBeater(closestEnemy));
         answer << ans;
     } else {
