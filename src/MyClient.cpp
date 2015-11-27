@@ -12,7 +12,11 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
     answer.str("");
 
     forOurs([this](const Unit& u) {
-        answer << move(u, DOWN);
+        if (u.x > u.y) {
+            answer << move(u, DOWN);
+        } else {
+            answer << move(u, RIGHT);
+        }
     });
 
     answer << produce(typeFromInt(state.getOurTick() % 3));
