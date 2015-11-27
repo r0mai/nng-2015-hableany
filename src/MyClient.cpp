@@ -124,7 +124,7 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
     int enemyC = enemyCount();
     int ourC = ourCount();
 
-    bool isOverwhelming = ourC > 6 && ourC > 1.3 * enemyC;
+    bool isOverwhelming = ourC > 5 && ourC > 1.3 * enemyC;
 
     std::map<Type, Weights> instincts;
     for (Type type : {ROCK, PAPER, SCISSORS}) {
