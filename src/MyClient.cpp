@@ -137,7 +137,9 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
                     instinct.add_source(u.x, u.y, 4, cool(4));
                 }
             } else {
-                instinct.add_source(u.x, u.y, 2, heat(2));
+                if (isOverwhelming) {
+                    instinct.add_source(u.x, u.y, 2, heat(2));
+                }
             }
         });
         forOurs([&](const Unit& u) {
