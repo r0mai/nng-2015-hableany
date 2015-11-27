@@ -113,7 +113,7 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
         }
 
         forOurs([&](const Unit& u) {
-            plan.set(u.x, u.y, 0.0);
+            plan.set(u.x, u.y, -1.0);
         });
 
         plans[type] = plan;
@@ -132,7 +132,7 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
             }
         });
         forOurs([&](const Unit& u) {
-            instinct.set(u.x, u.y, 0.0);
+            instinct.set(u.x, u.y, -1.0);
         });
         instincts[type] = instinct;
     }
