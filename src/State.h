@@ -58,6 +58,11 @@ struct State {
     std::array<std::array<Unit, 20>, 20> units;
 
     static State fromParser(const PARSER& parser);
+	
+	int enemyProductionTime = 10;
+	int enemyLastId;
+	
+	Type closestEnemyType();
 };
 
 std::string produce(Type t);

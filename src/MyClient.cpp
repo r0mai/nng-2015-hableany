@@ -5,6 +5,7 @@
 
 #include <map>
 
+
 void printMatchResult(PARSER::eMatchResult r) {
     switch (r) {
         default: break;
@@ -97,6 +98,27 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
     // mDebugLog << "Plan:" << std::endl;
     mDebugLog << plans[ROCK] << std::endl;
     mDebugLog << state << std::endl;
+	
+	kif << "{";
+	kif << "\"grid\": [";
+	for(int i=0;i<state.units.size();++i)
+	{
+		kif << "[";
+		for(int j=0;j<state.units[i].size();++j)
+		{
+			kif << "{ ";
+			kif << "\"unit\": " << state.units[j][i] << ",";
+			kif << "\"weight\": " << w.values[j][i];
+			kif << "}";
+			if(j<state.units[i].size()-1) kif << ",";
+		}
+		kif << "]";
+		if(i<state.units.size()-1) kif << ",";
+	}
+	kif << "],";
+	kif << "\"tick\":" << state.tick;
+	kif << "},";
+	
 
     printMatchResult(parser.match_result);
     return answer.str();
