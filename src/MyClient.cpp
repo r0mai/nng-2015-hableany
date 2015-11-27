@@ -154,9 +154,18 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
         const Weights& plan = plans[u.type];
         const Weights& instinct = instincts[u.type];
         if (instinct.shouldConsider(u.x, u.y, -99.0)) {
-            auto ans = move(u, instinct.getWarmest(u.x, u.y));
-            answer << ans;
-            mDebugLog << "instinct " << ans;
+            auto warmest_instinct = instinct.getWarmest(u.x, u.y);
+            if (u.x != 19 || u.y != 19) {
+                auto ans = move(u, warmest_instinct);
+                answer << ans;
+                mDebugLog << "instinct " << ans;
+            } else {
+                if (warmest_instinct <= 0) {
+                    auto ans = move(u, warmest_instinct);
+                    answer << ans;
+                    mDebugLog << "instinct (we are afraid) " << ans;
+                }
+            }
         } else {
             if (u.x != 19 || u.y != 19) {
                 auto ans = move(u, plan.getWarmest(u.x, u.y));
@@ -167,7 +176,7 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
             }
         }
     });
-    
+
     auto allyMaxUnitType = state.getAllyMaxUnitType();
 
     if (closestEnemyToBase.type != EMPTY)
