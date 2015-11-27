@@ -39,6 +39,11 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
 
     /// --------------
 
+    Unit closestEnemyToBase = state.closestEnemy(0, 0);
+    Unit closestEnemyToEnemyBase = state.closestEnemy(19, 19);
+    Unit closestEnemyToTopRight = state.closestEnemy(19, 0);
+    Unit closestEnemyToBottomLeft = state.closestEnemy(0, 19);
+
     std::map<Type, Weights> plans;
     for (Type type : {ROCK, PAPER, SCISSORS}) {
         Weights plan;
@@ -112,14 +117,12 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
         }
     });
 
-    Unit closestEnemy = state.closestEnemy(0, 0);
-
-    if (closestEnemy.type != EMPTY &&
-        state.getAllyUnitSize(closestEnemy.type) <
-        state.getAllyUnitSize(getBeater(closestEnemy.type)) +
-        state.getAllyUnitSize(getWinner(closestEnemy.type)))
+    if (closestEnemyToBase.type != EMPTY &&
+        state.getAllyUnitSize(closestEnemyToBase.type) <
+        state.getAllyUnitSize(getBeater(closestEnemyToBase.type)) +
+        state.getAllyUnitSize(getWinner(closestEnemyToBase.type)))
     {
-        auto ans = produce(getBeater(closestEnemy.type));
+        auto ans = produce(getBeater(closestEnemyToBase.type));
         answer << ans;
     } else {
         auto ans = produce(getWinner(state.getAllyMaxUnitType()));
