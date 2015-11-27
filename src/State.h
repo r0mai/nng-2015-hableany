@@ -123,20 +123,17 @@ struct Weights {
         return d >= -0.0001 && d <= 0.0001;
     }
 
-    bool hasNonZero(int sx, int sy) const {
-        if (sx >= 0 && !is_close_to_zero(values[sx-1][sy])) {
+    bool hasLessThan(int sx, int sy, double value) const {
+        if (sx >= 0 && values[sx-1][sy] <= value) {
             return true;
         }
-        if (sy >= 0 && !is_close_to_zero(values[sx][sy-1])) {
+        if (sy >= 0 && values[sx][sy-1] <= value) {
             return true;
         }
-        if (sx < 19 && !is_close_to_zero(values[sx+1][sy])) {
+        if (sx < 19 && values[sx+1][sy] <= value) {
             return true;
         }
-        if (sy < 19 && !is_close_to_zero(values[sx][sy+1])) {
-            return true;
-        }
-        if (!is_close_to_zero(values[sx][sy])) {
+        if (sy < 19 && values[sx][sy+1] <= value) {
             return true;
         }
         return false;
