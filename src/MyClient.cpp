@@ -145,34 +145,38 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
             answer << ans;
             mDebugLog << "instinct " << ans;
         } else {
-            auto ans = move(u, plan.getWarmest(u.x, u.y));
-            answer << ans;
-            mDebugLog << "plan " << ans;
+            if (u.x != 19 || u.y != 19) {
+                auto ans = move(u, plan.getWarmest(u.x, u.y));
+                answer << ans;
+                mDebugLog << "plan " << ans;
+            } else {
+                mDebugLog << "Not moving because we win" << std::endl;
+            }
         }
     });
-	
-	auto allyMaxUnitType = state.getAllyMaxUnitType();
+    
+    auto allyMaxUnitType = state.getAllyMaxUnitType();
 
     if (closestEnemyToBase.type != EMPTY)
     {
-		if(allyMaxUnitType != EMPTY)
-		{
-			if(allyMaxUnitType == getBeater(closestEnemyToBase.type))
-			{
-				auto ans = produce(closestEnemyToBase.type);
-				answer << ans << ".";
-			}
-			else
-			{
-				auto ans = produce(getBeater(closestEnemyToBase.type));
-				answer << ans << ".";
-			}
-		}
-		else
-		{
-			auto ans = produce(getBeater(closestEnemyToBase.type));
-			answer << ans << ".";
-		}
+        if(allyMaxUnitType != EMPTY)
+        {
+            if(allyMaxUnitType == getBeater(closestEnemyToBase.type))
+            {
+                auto ans = produce(closestEnemyToBase.type);
+                answer << ans << ".";
+            }
+            else
+            {
+                auto ans = produce(getBeater(closestEnemyToBase.type));
+                answer << ans << ".";
+            }
+        }
+        else
+        {
+            auto ans = produce(getBeater(closestEnemyToBase.type));
+            answer << ans << ".";
+        }
     }
     else
     {
