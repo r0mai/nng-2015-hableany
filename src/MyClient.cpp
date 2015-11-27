@@ -54,8 +54,10 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
     for (Type type : {ROCK, PAPER, SCISSORS}) {
         Weights plan;
 
-        if (closestEnemyToBase.type == getWinner(type) &&
-            distance(closestEnemyToBase.x, closestEnemyToBase.y, 0, 0) < 10)
+        if ((closestEnemyToBase.type == getWinner(type) &&
+            distance(closestEnemyToBase.x, closestEnemyToBase.y, 0, 0) < 10) ||
+            (closestEnemyToBase.type == type &&
+            distance(closestEnemyToBase.x, closestEnemyToBase.y, 0, 0) < 8))
         {
             plan.add_source(0, 0, 29, heat_max(2000, 100));
         } else {
