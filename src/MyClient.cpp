@@ -114,17 +114,17 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
         }
     });
 
-    Type closestEnemy = state.closestEnemyType();
+    Unit closestEnemy = state.closestEnemy();
 
-    if (closestEnemy != EMPTY &&
-        state.getAllyUnitSize(closestEnemy) <
-        state.getAllyUnitSize(getBeater(closestEnemy)) +
-        state.getAllyUnitSize(getWinner(closestEnemy)))
+    if (closestEnemy.type != EMPTY &&
+        state.getAllyUnitSize(closestEnemy.type) <
+        state.getAllyUnitSize(getBeater(closestEnemy.type)) +
+        state.getAllyUnitSize(getWinner(closestEnemy.type)))
     {
-        auto ans = produce(getBeater(closestEnemy));
+        auto ans = produce(getBeater(closestEnemy.type));
         answer << ans;
     } else {
-        auto ans = produce(typeFromInt(rand() % 3));
+        auto ans = produce(getWinner(state.getAllyMaxUnitType()));
         answer << ans;
     }
     answer << ".";
