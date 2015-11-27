@@ -12,10 +12,10 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
     answer.str("");
 
     forOurs([this](const Unit& u) {
-        answer << move(u, RIGHT) << std::endl;
+        answer << move(u, RIGHT);
     });
 
-    answer << produce(typeFromInt(state.getOurTick() % 3)) << std::endl;
+    answer << produce(typeFromInt(state.getOurTick() % 3));
     answer << ".";
     mDebugLog << answer.str() << std::endl;
 

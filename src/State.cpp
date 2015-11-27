@@ -4,9 +4,9 @@
 
 std::string produce(Type t) {
     switch (t) {
-        case ROCK: return "prod R";
-        case PAPER: return "prod P";
-        case SCISSORS: return "prod S";
+        case ROCK: return "prod R\n";
+        case PAPER: return "prod P\n";
+        case SCISSORS: return "prod S\n";
         default: return "";
     }
 }
@@ -22,7 +22,7 @@ std::string toString(Direction d) {
 }
 
 std::string move(const Unit& u, Direction dir) {
-    return std::to_string(u.id) + " " + toString(dir);
+    return std::to_string(u.id) + " " + toString(dir) + "\n";
 }
 
 Type typeFromInt(int i) {
