@@ -48,7 +48,7 @@ struct Unit {
 };
 
 struct State {
-    int tick;
+    int tick,ar,as,ap,er,es,ep;
 
     Ownership rightTopBase = NEUTRAL;
     Ownership leftBottomBase = NEUTRAL;
@@ -58,11 +58,11 @@ struct State {
     std::array<std::array<Unit, 20>, 20> units;
 
     static State fromParser(const PARSER& parser);
-	
-	int enemyProductionTime = 10;
-	int enemyLastId;
-	
-	Type closestEnemyType();
+
+    int enemyProductionTime = 10;
+    int enemyLastId;
+
+    Type closestEnemyType();
 };
 
 std::string produce(Type t);

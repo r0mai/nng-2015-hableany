@@ -56,6 +56,7 @@ Type typeFromInt(int i) {
 
 State State::fromParser(const PARSER& parser) {
     State state;
+    state.ar=state.as=state.ap=state.er=state.es=state.ep=0;
     state.tick = parser.tick;
     state.rightTopBase = parser.base_owner[0] == -1 ? NEUTRAL :
         (parser.base_owner[0] == 0 ? OURS : THEIRS);
@@ -70,11 +71,29 @@ State State::fromParser(const PARSER& parser) {
         unit.type = typeFromInt(s.t);
         unit.is_enemy = bool(s.side);
         state.units[s.x][s.y] = unit;
-		if(unit.is_enemy && unit.x == 19 && unit.y == 19 && unit.id > state.enemyLastId)
-		{
-			state.enemyLastId=unit.id;
-			state.enemyProductionTime++;
-		}
+        if(unit.is_enemy && unit.x == 19 && unit.y == 19 && unit.id > state.enemyLastId)
+        {
+            state.enemyLastId=unit.id;
+            state.enemyProductionTime++;
+        }
+        if(unit.is_enemy)
+        {
+            switch(s.t)
+            {
+                case 0: state.er++; break;
+                case 1: state.ep++; break;
+                case 2: state.es++; break;
+            }
+        }
+        else
+        {
+            switch(s.t)
+            {
+                case 0: state.ar++; break;
+                case 1: state.ap++; break;
+                case 2: state.as++; break;
+            }
+        }
     }
 
     return state;
@@ -147,21 +166,21 @@ std::ostream& operator<<(std::ostream& os, const Weights& w) {
 
 Type State::closestEnemyType()
 {
-	Type t=EMPTY;
-	
-	int i=0,j=0;
-	while(!units[j][i].is_enemy)
-	{
-		if(j == 0)
-		{
-			j=i+1;
-			i=0;
-		}
-		j--;
-		i++;
-	}
-	if(units[j][i].is_enemy)
-		t=units[j][i].type;
-	
-	return t;
+    Type t=EMPTY;
+    
+    int i=0,j=0;
+    while(!units[j][i].is_enemy)
+    {
+        if(j == 0)
+        {
+            j=i+1;
+            i=0;
+        }
+        j--;
+        i++;
+    }
+    if(units[j][i].is_enemy)
+        t=units[j][i].type;
+    
+    return t;
 }
