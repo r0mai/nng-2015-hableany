@@ -147,12 +147,12 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
             kif << "{ ";
             kif << "\"unit\": \"" << state.units[j][i] << "\",";
             kif << "\"weight\": ";
-			kif << "{";
-			kif << "\"rock\": " << plans[ROCK].values[j][i] << ",";
-			kif << "\"paper\": " << plans[PAPER].values[j][i] << ",";
-			kif << "\"scissors\": " << plans[SCISSORS].values[j][i];
+            kif << "{";
+            kif << "\"rock\": " << plans[ROCK].values[j][i] << ",";
+            kif << "\"paper\": " << plans[PAPER].values[j][i] << ",";
+            kif << "\"scissors\": " << plans[SCISSORS].values[j][i];
             kif << "}";
-			kif << "}";
+            kif << "}";
             if(j<state.units[i].size()-1) kif << ",";
         }
         kif << "]";

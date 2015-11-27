@@ -116,20 +116,24 @@ struct Weights {
                 adjacent.begin());
     }
 
+    static bool is_close_to_zero(double d) {
+        return d >= -0.0001 && d <= 0.0001;
+    }
+
     bool hasNonZero(int sx, int sy) const {
-        if (sx >= 0 && values[sx-1][sy] != 0) {
+        if (sx >= 0 && !is_close_to_zero(values[sx-1][sy])) {
             return true;
         }
-        if (sy >= 0 && values[sx][sy-1] != 0) {
+        if (sy >= 0 && !is_close_to_zero(values[sx][sy-1])) {
             return true;
         }
-        if (sx < 19 && values[sx+1][sy] != 0) {
+        if (sx < 19 && !is_close_to_zero(values[sx+1][sy])) {
             return true;
         }
-        if (sy < 19 && values[sx][sy+1] != 0) {
+        if (sy < 19 && !is_close_to_zero(values[sx][sy+1])) {
             return true;
         }
-        if (values[sx][sy] != 0) {
+        if (!is_close_to_zero(values[sx][sy])) {
             return true;
         }
         return false;
