@@ -3,6 +3,16 @@
 #include "parser.h"
 #include "State.h"
 
+
+void printMatchResult(PARSER::eMatchResult r) {
+    switch (r) {
+        default: break;
+        case PARSER::VICTORY: std::cout << "Victory" << std::endl; break;
+        case PARSER::DEFEAT: std::cout << "Defeat" << std::endl; break;
+        case PARSER::DRAW: std::cout << "Draw" << std::endl; break;
+    }
+}
+
 std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerResponse)
 {
     PARSER parser;
@@ -25,6 +35,7 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
 
     mDebugLog << state << std::endl;
 
+    printMatchResult(parser.match_result);
     return answer.str();
 }
 

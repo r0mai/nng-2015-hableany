@@ -39,6 +39,8 @@ struct State {
 
     std::array<std::array<Unit, 20>, 20> units;
 
+    std::array<std::array<int, 20>, 20> weights;
+
     static State fromParser(const PARSER& parser);
 };
 
