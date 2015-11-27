@@ -21,6 +21,12 @@ std::function<double(double, int)> heat(double amount, double slope = 1) {
     };
 }
 
+std::function<double(double, int)> heat_max(double amount, double slope = 1) {
+    return [=](double o, int d) {
+        return std::max(o,  (amount - slope*d));
+    };
+}
+
 std::function<double(double, int)> cool(double amount, double slope = 1) {
     return [=](double o, int d) {
         return o - (amount - slope*d);
@@ -51,45 +57,45 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
         if (closestEnemyToBase.type == getWinner(type) &&
             distance(closestEnemyToBase.x, closestEnemyToBase.y, 0, 0) < 10)
         {
-            plan.add_source(0, 0, 29, heat(10000, 10));
+            plan.add_source(0, 0, 29, heat_max(10000, 10));
         } else {
             // not cooling
         }
 
         if (state.leftBottomBase == NEUTRAL && state.rightTopBase == NEUTRAL) {
-            plan.add_source(0, 19, 21, heat(1000, 10));
-            plan.add_source(19, 0, 21, heat(1002, 10));
+            plan.add_source(0, 19, 21, heat_max(1000, 10));
+            plan.add_source(19, 0, 21, heat_max(1002, 10));
         } else if (state.rightTopBase == THEIRS && state.leftBottomBase == THEIRS) {
-            plan.add_source(19, 0, 21, heat(1000, 10));
-            plan.add_source(0, 19, 21, heat(1002, 10));
+            plan.add_source(19, 0, 21, heat_max(1000, 10));
+            plan.add_source(0, 19, 21, heat_max(1002, 10));
         } else if (state.rightTopBase == THEIRS && state.leftBottomBase == NEUTRAL) {
-            plan.add_source(19, 0, 21, heat(1000, 10));
-            plan.add_source(0, 19, 21, heat(1000, 10));
+            plan.add_source(19, 0, 21, heat_max(1000, 10));
+            plan.add_source(0, 19, 21, heat_max(1000, 10));
         } else if (state.rightTopBase == NEUTRAL && state.leftBottomBase == THEIRS) {
-            plan.add_source(19, 0, 21, heat(1000, 10));
-            plan.add_source(0, 19, 21, heat(1000, 10));
+            plan.add_source(19, 0, 21, heat_max(1000, 10));
+            plan.add_source(0, 19, 21, heat_max(1000, 10));
         } else if (state.rightTopBase == OURS && state.leftBottomBase == THEIRS &&
                 closestEnemyToTopRight.type == getWinner(type) &&
                 distance(closestEnemyToTopRight.x, closestEnemyToTopRight.y, 0, 0) < 6)
         {
-            plan.add_source(19, 0, 21, heat(1300, 10));
+            plan.add_source(19, 0, 21, heat_max(1300, 10));
         } else if (state.rightTopBase == THEIRS && state.leftBottomBase == OURS &&
                 closestEnemyToBottomLeft.type == getWinner(type) &&
                 distance(closestEnemyToBottomLeft.x, closestEnemyToBottomLeft.y, 0, 0) < 6)
         {
-            plan.add_source(0, 19, 21, heat(1300, 10));
+            plan.add_source(0, 19, 21, heat_max(1300, 10));
         } else if (state.rightTopBase == OURS && state.leftBottomBase == OURS) {
             if (closestEnemyToBottomLeft.type == getWinner(type) &&
                 distance(closestEnemyToBottomLeft.x, closestEnemyToBottomLeft.y, 0, 0) < 6)
             {
-                plan.add_source(0, 19, 21, heat(1300, 10));
+                plan.add_source(0, 19, 21, heat_max(1300, 10));
             } else if (closestEnemyToTopRight.type == getWinner(type) &&
                 distance(closestEnemyToTopRight.x, closestEnemyToTopRight.y, 0, 0) < 6)
             {
-                plan.add_source(19, 0, 21, heat(1300, 10));
+                plan.add_source(19, 0, 21, heat_max(1300, 10));
             }
 
-            plan.add_source(19, 19, 41, heat(1500, 15));
+            plan.add_source(19, 19, 41, heat_max(1500, 15));
         }
 
         forOurs([&](const Unit& u) {
