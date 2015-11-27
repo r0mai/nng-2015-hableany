@@ -77,9 +77,7 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
         plan.add_source(0, 19, 20, cool(20));
 
         forOurs([&](const Unit& u) {
-            if (u.type == type) {
-                plan.add_source(u.x, u.y, 0, cool(3));
-            }
+            plan.add_source(u.x, u.y, 0, cool(300));
         });
 
         plans[type] = plan;
