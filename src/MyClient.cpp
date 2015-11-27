@@ -63,14 +63,14 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
 
         // OVERWRITE EVERYTHING. TODO remove
 
-        if (firstOurUnit != nullptr) {
-            if (firstOurUnit->type == type &&
-                (firstEnemyUnit == nullptr ||
-                getWinner(firstOurUnit->type) == firstEnemyUnit->type))
-            {
-                plan.add_source(0, 19, 20, heat(20));
-            }
-        }
+        //  if (firstOurUnit != nullptr) {
+        //      if (firstOurUnit->type == type &&
+        //          (firstEnemyUnit == nullptr ||
+        //          getWinner(firstOurUnit->type) == firstEnemyUnit->type))
+        //      {
+        //          plan.add_source(0, 19, 20, heat(20));
+        //      }
+        //  }
 
         plan.add_source(19, 19, 40, heat(300, 2));
         plan.add_source(19, 0, 20, cool(20));
@@ -110,7 +110,7 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
     Type closestEnemy = state.closestEnemyType();
 
     if (closestEnemy != EMPTY) {
-        answer << produce(getWinner(closestEnemy));
+        answer << produce(getBeater(closestEnemy));
     } else {
         answer << produce(PAPER);
     }
