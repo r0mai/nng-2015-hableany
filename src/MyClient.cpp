@@ -112,7 +112,7 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
         }
     });
 
-    Unit closestEnemy = state.closestEnemy();
+    Unit closestEnemy = state.closestEnemy(0, 0);
 
     if (closestEnemy.type != EMPTY &&
         state.getAllyUnitSize(closestEnemy.type) <

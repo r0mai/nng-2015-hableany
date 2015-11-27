@@ -183,7 +183,7 @@ std::ostream& operator<<(std::ostream& os, const Weights& w) {
     return os;
 }
 
-Unit State::closestEnemy()
+Unit State::closestEnemy(int sx, int sy)
 {
     int x=19,y=19;
 
@@ -191,7 +191,7 @@ Unit State::closestEnemy()
     {
         for(int j=0;j<units[i].size();++j)
         {
-            if(units[j][i].is_enemy && distance(0,0,x,y)>distance(0,0,j,i))
+            if(units[j][i].is_enemy && distance(sx,sy,x,y)>distance(sx,sy,j,i))
             {
                 x=j;
                 y=i;

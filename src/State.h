@@ -62,7 +62,7 @@ struct State {
     int enemyProductionTime = 10;
     int enemyLastId;
 
-    Unit closestEnemy();
+    Unit closestEnemy(int sx, int sy);
     //Type getProductionType();
     int getAllyUnitSize(Type t);
     int getEnemyUnitSize(Type t);
