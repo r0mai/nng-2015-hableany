@@ -152,35 +152,38 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
     });
 
     if (closestEnemyToBase.type != EMPTY)
-	{
-		if(distance(0,0,closestEnemyToBase.x,closestEnemyToBase.y)<18)
-		{
-			auto ans = produce(getBeater(closestEnemyToBase.type));
-		}
-		else
-		{
-			if(state.getAllyMaxUnitType() == closestEnemyToBase.type)
-			{
-				auto ans = produce(getWinner(closestEnemyToBase.type));
-			}
-			else
-			{
-				auto ans = produce(getBeater(closestEnemyToBase.type));
-			}
-		}
-	}
-    else 
-	{
-        auto ans = produce(getWinner(state.getAllyMaxUnitType()));
+    {
+        if(distance(0,0,closestEnemyToBase.x,closestEnemyToBase.y)<18)
+        {
+            auto ans = produce(getBeater(closestEnemyToBase.type));
+            answer << ans << ".";
+        }
+        else
+        {
+            if(state.getAllyMaxUnitType() == closestEnemyToBase.type)
+            {
+                auto ans = produce(getWinner(closestEnemyToBase.type));
+                answer << ans << ".";
+            }
+            else
+            {
+                auto ans = produce(getBeater(closestEnemyToBase.type));
+                answer << ans << ".";
+            }
+        }
     }
-	answer << ans << ".";
+    else
+    {
+        auto ans = produce(getWinner(state.getAllyMaxUnitType()));
+        answer << ans << ".";
+    }
     mDebugLog << answer.str() << std::endl;
 
     /// --------------
 
     // mDebugLog << "Plan:" << std::endl;
-	mDebugLog << "ar:" << state.ar << "as:" << state.as << "ap:" << state.ap << std::endl;
-	mDebugLog << "er:" << state.er << "es:" << state.es << "ep:" << state.ep << std::endl;
+    mDebugLog << "ar:" << state.ar << "as:" << state.as << "ap:" << state.ap << std::endl;
+    mDebugLog << "er:" << state.er << "es:" << state.es << "ep:" << state.ep << std::endl;
     mDebugLog << plans[ROCK] << std::endl;
     mDebugLog << instincts[ROCK] << std::endl;
     mDebugLog << state << std::endl;
