@@ -57,7 +57,7 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
         if (closestEnemyToBase.type == getWinner(type) &&
             distance(closestEnemyToBase.x, closestEnemyToBase.y, 0, 0) < 10)
         {
-            plan.add_source(0, 0, 29, heat_max(10000, 10));
+            plan.add_source(0, 0, 29, heat_max(2000, 100));
         } else {
             // not cooling
         }
