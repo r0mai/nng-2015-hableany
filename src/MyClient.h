@@ -29,5 +29,18 @@ protected:
         }
     }
 
+    template<class F>
+    void forEnemies(F f) {
+        for (unsigned y = 0; y < 20; ++y) {
+            for (unsigned x = 0; x < 20; ++x) {
+                if (state.units[x][y].type != EMPTY &&
+                    state.units[x][y].is_enemy)
+                {
+                    f(state.units[x][y]);
+                }
+            }
+        }
+    }
+
     std::stringstream answer;
 };
