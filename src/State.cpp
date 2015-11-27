@@ -115,15 +115,23 @@ std::ostream& operator<<(std::ostream& os, const Unit& u) {
     if (!u.is_enemy) {
         ch = std::toupper(ch);
     }
-    os << ch;
+	if(u.is_enemy)
+	{
+		os << "\e[0;34m";
+	}
+	else if(u.type!=EMPTY)
+	{
+		os << "\e[0;31m";
+	}
+    os << ch << "\e[0m";
     return os;
 }
 
 std::ostream& operator<<(std::ostream& os, const Ownership& o) {
     switch (o) {
-        case NEUTRAL: os << '.'; break;
-        case OURS: os << 'B'; break;
-        case THEIRS: os << 'b'; break;
+        case NEUTRAL: os << "\e[0m."; break;
+        case OURS: os << "\e[0;31mB\e[0m"; break;
+        case THEIRS: os << "\e[0;34mb\e[0m"; break;
     }
     return os;
 }

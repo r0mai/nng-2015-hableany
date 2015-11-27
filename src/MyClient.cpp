@@ -150,19 +150,19 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
     mDebugLog << state << std::endl;
 
     kif << "{";
-    kif << "\"grid\": [";
+    kif << "\"g\": [";
     for(int i=0;i<state.units.size();++i)
     {
         kif << "[";
         for(int j=0;j<state.units[i].size();++j)
         {
             kif << "{ ";
-            kif << "\"unit\": \"" << state.units[j][i] << "\",";
-            kif << "\"weight\": ";
+            kif << "\"u\": \"" << state.units[j][i] << "\",";
+            kif << "\"w\": ";
             kif << "{";
-            kif << "\"rock\": " << plans[ROCK].values[j][i] << ",";
-            kif << "\"paper\": " << plans[PAPER].values[j][i] << ",";
-            kif << "\"scissors\": " << plans[SCISSORS].values[j][i];
+            kif << "\"r\": " << plans[ROCK].values[j][i] << ",";
+            kif << "\"p\": " << plans[PAPER].values[j][i] << ",";
+            kif << "\"s\": " << plans[SCISSORS].values[j][i];
             kif << "}";
             kif << "}";
             if(j<state.units[i].size()-1) kif << ",";
@@ -171,7 +171,7 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
         if(i<state.units.size()-1) kif << ",";
     }
     kif << "],";
-    kif << "\"tick\":" << state.tick;
+    kif << "\"t\":" << state.tick;
     kif << "},";
 
 
