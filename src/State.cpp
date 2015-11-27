@@ -182,5 +182,5 @@ Type State::closestEnemyType()
     
     
     
-    return units[x][y];
+    return units[x][y].type;
 }
