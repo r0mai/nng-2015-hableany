@@ -24,9 +24,9 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
     /// --------------
 
     Weights plan;
-    plan.add_source(19, 19, 40, [](int o, int d) {
-        return o + (40 - d);
-    });
+    plan.add_source(19, 19, 40, [](int o, int d) { return o + (40 - d); });
+    plan.add_source(0, 19, 20, [](int o, int d) { return o - (20 - d); });
+    plan.add_source(19, 0, 20, [](int o, int d) { return o - (20 - d); });
 
     forOurs([&](const Unit& u) {
         answer << move(u, plan.getWarmest(u.x, u.y));
