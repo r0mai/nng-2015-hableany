@@ -119,6 +119,11 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
         plans[type] = plan;
     }
 
+    int enemyC = enemyCount();
+    int ourC = ourCount();
+
+    bool isOverwhelming = ourC > 6 && ourC > 1.3 * enemyC;
+
     std::map<Type, Weights> instincts;
     for (Type type : {ROCK, PAPER, SCISSORS}) {
         Weights instinct;
@@ -126,9 +131,13 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
             if (u.type == getWinner(type)) {
                 instinct.add_source(u.x, u.y, 4, heat(4));
             } else if (u.type == getBeater(type)) {
-                instinct.add_source(u.x, u.y, 4, cool(4));
+                if (isOverwhelming) {
+                    instinct.add_source(u.x, u.y, 2, cool(2));
+                } else {
+                    instinct.add_source(u.x, u.y, 4, cool(4));
+                }
             } else {
-
+                instinct.add_source(u.x, u.y, 2, heat(2));
             }
         });
         forOurs([&](const Unit& u) {
@@ -192,6 +201,7 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
     mDebugLog << "er:" << state.er << "es:" << state.es << "ep:" << state.ep << std::endl;
     mDebugLog << plans[ROCK] << std::endl;
     mDebugLog << instincts[ROCK] << std::endl;
+    mDebugLog << "IsOverwhelming = " << std::boolalpha << isOverwhelming << std::endl;
     mDebugLog << state << std::endl;
 
     kif << "{";

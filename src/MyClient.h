@@ -44,6 +44,18 @@ protected:
     }
 
 
+    int enemyCount() {
+        int c = 0;
+        forEnemies([&](const auto&) { ++c; });
+        return c;
+    }
+    int ourCount() {
+        int c = 0;
+        forOurs([&](const auto&) { ++c; });
+        return c;
+    }
+
+
     Unit *findUnit(int id) {
         for (unsigned y = 0; y < 20; ++y) {
             for (unsigned x = 0; x < 20; ++x) {
