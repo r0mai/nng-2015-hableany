@@ -123,17 +123,15 @@ std::ostream& operator<<(std::ostream& os, const Unit& u) {
 	{
 		os << "\e[0;31m";
 	}
-	else
-		os << "\e[0m";
-    os << ch;
+    os << ch << "\e[0m";
     return os;
 }
 
 std::ostream& operator<<(std::ostream& os, const Ownership& o) {
     switch (o) {
         case NEUTRAL: os << "\e[0m."; break;
-        case OURS: os << "\e[0;31mB"; break;
-        case THEIRS: os << "\e[0;34mb"; break;
+        case OURS: os << "\e[0;31mB\e[0m"; break;
+        case THEIRS: os << "\e[0;34mb\e[0m"; break;
     }
     return os;
 }
