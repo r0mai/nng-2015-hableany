@@ -70,6 +70,11 @@ State State::fromParser(const PARSER& parser) {
         unit.type = typeFromInt(s.t);
         unit.is_enemy = bool(s.side);
         state.units[s.x][s.y] = unit;
+		if(unit.is_enemy && unit.x == 19 && unit.y == 19 && unit.id > enemyLastId)
+		{
+			enemyLastId=unit.id;
+			enemyProductionTime++;
+		}
     }
 
     return state;
@@ -138,4 +143,25 @@ std::ostream& operator<<(std::ostream& os, const Weights& w) {
         os << '\n';
     }
     return os;
+}
+
+Type State::closestEnemyType()
+{
+	Type t=EMPTY;
+	
+	int i=0,j=0;
+	while(!units[j][i].is_enemy)
+	{
+		if(j == 0)
+		{
+			j=i+1;
+			i=0;
+		}
+		j--;
+		i++;
+	}
+	if(units[j][i].is_enemy)
+		t=units[j][i].type;
+	
+	return t;
 }
