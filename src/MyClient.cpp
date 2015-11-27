@@ -15,13 +15,13 @@ void printMatchResult(PARSER::eMatchResult r) {
     }
 }
 
-std::function<double(double, int)> heat(int amount, int slope = 1) {
+std::function<double(double, int)> heat(double amount, double slope = 1) {
     return [=](double o, int d) {
         return o + slope*(amount - d);
     };
 }
 
-std::function<double(double, int)> cool(int amount, int slope = 1) {
+std::function<double(double, int)> cool(double amount, double slope = 1) {
     return [=](double o, int d) {
         return o - slope*(amount - d);
     };
@@ -104,18 +104,24 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
         const Weights& plan = plans[u.type];
         const Weights& instinct = instincts[u.type];
         if (instinct.hasNonZero(u.x, u.y)) {
-            answer << move(u, instinct.getWarmest(u.x, u.y));
+            auto ans = move(u, instinct.getWarmest(u.x, u.y));
+            answer << ans;
+            mDebugLog << "instinct " << ans;
         } else {
-            answer << move(u, plan.getWarmest(u.x, u.y));
+            auto ans = move(u, plan.getWarmest(u.x, u.y));
+            answer << ans;
+            mDebugLog << "plan " << ans;
         }
     });
 
     Type closestEnemy = state.closestEnemyType();
 
     if (closestEnemy != EMPTY) {
-        answer << produce(getBeater(closestEnemy));
+        auto ans = produce(getBeater(closestEnemy));
+        answer << ans;
     } else {
-        answer << produce(typeFromInt(rand() % 3));
+        auto ans = produce(typeFromInt(rand() % 3));
+        answer << ans;
     }
     answer << ".";
     mDebugLog << answer.str() << std::endl;
