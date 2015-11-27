@@ -1,4 +1,5 @@
 #include <vector>
+#include <string>
 #include "State.h"
 
 std::string produce(Type t) {
@@ -8,6 +9,20 @@ std::string produce(Type t) {
         case SCISSORS: return "prod S";
         default: return "";
     }
+}
+
+std::string toString(Direction d) {
+    switch (d) {
+        case LEFT: return "left";
+        case RIGHT: return "right";
+        case UP: return "up";
+        case DOWN: return "down";
+    }
+    return "";
+}
+
+std::string move(const Unit& u, Direction dir) {
+    return std::to_string(u.id) + " " + toString(dir);
 }
 
 Type typeFromInt(int i) {
@@ -20,6 +35,8 @@ State State::fromParser(const PARSER& parser) {
 
     for (const auto& s : parser.soldiers) {
         Unit unit;
+        unit.x = s.x;
+        unit.y = s.y;
         unit.id = s.id;
         unit.type = typeFromInt(s.t);
         unit.is_enemy = bool(s.side);

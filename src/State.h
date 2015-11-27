@@ -12,12 +12,21 @@ enum Type {
     SCISSORS
 };
 
+enum Direction {
+    LEFT,
+    RIGHT,
+    UP,
+    DOWN
+};
+
+std::string toString(Direction d);
+
 // from 0, 1, 2
 Type typeFromInt(int i);
 
-std::string produce(Type t);
-
 struct Unit {
+    int x = -1;
+    int y = -1;
     int id = -1;
     bool is_enemy = false;
     Type type = EMPTY;
@@ -32,6 +41,10 @@ struct State {
 
     static State fromParser(const PARSER& parser);
 };
+
+std::string produce(Type t);
+std::string move(const Unit& u, Direction dir);
+
 
 std::ostream& operator<<(std::ostream& os, const Unit& u);
 std::ostream& operator<<(std::ostream& os, const State& state);

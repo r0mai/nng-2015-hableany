@@ -3,25 +3,25 @@
 #include "parser.h"
 #include "State.h"
 
-MyClient::MyClient()
-{
-}
-
 std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerResponse)
 {
     PARSER parser;
     parser.Parse(ServerResponse);
 
-    State state = State::fromParser(parser);
+    state = State::fromParser(parser);
+    answer.str("");
 
-    std::stringstream ss;
-    ss << produce(typeFromInt(state.getOurTick() % 3)) << std::endl;
-    ss<<".";
-    mDebugLog << ss.str() << std::endl;
+    forOurs([this](const Unit& u) {
+        answer << move(u, RIGHT) << std::endl;
+    });
+
+    answer << produce(typeFromInt(state.getOurTick() % 3)) << std::endl;
+    answer << ".";
+    mDebugLog << answer.str() << std::endl;
 
     mDebugLog << state << std::endl;
 
-    return ss.str();
+    return answer.str();
 }
 
 
