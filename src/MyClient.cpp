@@ -15,14 +15,14 @@ void printMatchResult(PARSER::eMatchResult r) {
     }
 }
 
-std::function<int(int, int)> heat(int amount, int slope = 1) {
-    return [=](int o, int d) {
+std::function<double(double, int)> heat(int amount, int slope = 1) {
+    return [=](double o, int d) {
         return o + slope*(amount - d);
     };
 }
 
-std::function<int(int, int)> cool(int amount, int slope = 1) {
-    return [=](int o, int d) {
+std::function<double(double, int)> cool(int amount, int slope = 1) {
+    return [=](double o, int d) {
         return o - slope*(amount - d);
     };
 }

@@ -86,8 +86,8 @@ int distance(int x1, int y1, int x2, int y2) {
 struct Weights {
     Weights() { fill(0); }
 
-    void fill(int value);
-    void set(int x, int y, int value);
+    void fill(double value);
+    void set(int x, int y, double value);
 
     template<class F>
     void add_source(int sx, int sy, int r, F f) {
@@ -102,7 +102,7 @@ struct Weights {
     }
 
     Direction getWarmest(int sx, int sy) const {
-        std::array<int, 5> adjacent = {
+        std::array<double, 5> adjacent = {
             sx > 0 ? values[sx - 1][sy] : -1000000,
             sx < 19 ? values[sx + 1][sy] : -1000000,
             sy > 0 ? values[sx][sy - 1] : -1000000,
@@ -132,7 +132,7 @@ struct Weights {
         return false;
     }
 
-    std::array<std::array<int, 20>, 20> values;
+    std::array<std::array<double, 20>, 20> values;
 };
 
 std::ostream& operator<<(std::ostream& os, const Weights& w);

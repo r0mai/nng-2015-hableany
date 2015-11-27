@@ -139,15 +139,15 @@ std::ostream& operator<<(std::ostream& os, const State& state) {
     return os;
 }
 
-void Weights::fill(int fill_value) {
+void Weights::fill(double fill_value) {
     for (auto& column : values) {
-        for (int& value : column) {
+        for (double& value : column) {
             value = fill_value;
         }
     }
 }
 
-void Weights::set(int x, int y, int value) {
+void Weights::set(int x, int y, double value) {
     if (x < 0 || x >= 20 || y < 0 || y >= 20) {
         return;
     }
