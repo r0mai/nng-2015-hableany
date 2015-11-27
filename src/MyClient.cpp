@@ -3,11 +3,11 @@
 #include "parser.h"
 
 
-MYCLIENT::MYCLIENT()
+MyClient::MyClient()
 {
 }
 
-std::string MYCLIENT::HandleServerResponse(std::vector<std::string> &ServerResponse)
+std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerResponse)
 {
     PARSER parser;
     parser.Parse(ServerResponse);
@@ -20,5 +20,5 @@ std::string MYCLIENT::HandleServerResponse(std::vector<std::string> &ServerRespo
 
 CLIENT *CreateClient()
 {
-    return new MYCLIENT();
+    return new MyClient();
 }
