@@ -9,16 +9,16 @@ MYCLIENT::MYCLIENT()
 
 std::string MYCLIENT::HandleServerResponse(std::vector<std::string> &ServerResponse)
 {
-	PARSER parser;
-	parser.Parse(ServerResponse);
-	std::stringstream ss;
-	ss<<"prod R\n";
-	ss<<".";
-	return ss.str();
+    PARSER parser;
+    parser.Parse(ServerResponse);
+    std::stringstream ss;
+    ss<<"prod R\n";
+    ss<<".";
+    return ss.str();
 }
 
 
 CLIENT *CreateClient()
 {
-	return new MYCLIENT();
+    return new MYCLIENT();
 }
