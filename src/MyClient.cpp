@@ -17,13 +17,13 @@ void printMatchResult(PARSER::eMatchResult r) {
 
 std::function<double(double, int)> heat(double amount, double slope = 1) {
     return [=](double o, int d) {
-        return o + slope*(amount - d);
+        return o + (amount - slope*d);
     };
 }
 
 std::function<double(double, int)> cool(double amount, double slope = 1) {
     return [=](double o, int d) {
-        return o - slope*(amount - d);
+        return o - (amount - slope*d);
     };
 }
 
@@ -47,42 +47,53 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
     std::map<Type, Weights> plans;
     for (Type type : {ROCK, PAPER, SCISSORS}) {
         Weights plan;
-        //plan.add_source(19, 19, 40, heat(700));
 
-        //if (state.rightTopBase == NEUTRAL) {
-        //    plan.add_source(19, 0, 20, heat(400));
-        //} else if (state.rightTopBase == THEIRS) {
-        //    plan.add_source(19, 0, 20, heat(400));
-        //} else {
-        //    plan.add_source(19, 0, 20, cool(400));
-        //}
-        //forEnemies([&](const Unit& u) {
-        //    if (u.type == getWinner(type)) {
+        if (closestEnemyToBase.type == getWinner(type) &&
+            distance(closestEnemyToBase.x, closestEnemyToBase.y, 0, 0) < 10)
+        {
+            plan.add_source(0, 0, 29, heat(10000, 10));
+        } else {
+            // not cooling
+        }
 
-        //    } else if (u.type == getBeater(type)) {
-        //        plan.add_source(u.x, u.y, 15, cool(30));
-        //    } else {
+        if (state.leftBottomBase == NEUTRAL && state.rightTopBase == NEUTRAL) {
+            plan.add_source(0, 19, 21, heat(1000, 10));
+            plan.add_source(19, 0, 21, heat(1002, 10));
+        } else if (state.rightTopBase == THEIRS && state.leftBottomBase == THEIRS) {
+            plan.add_source(19, 0, 21, heat(1000, 10));
+            plan.add_source(0, 19, 21, heat(1002, 10));
+        } else if (state.rightTopBase == THEIRS && state.leftBottomBase == NEUTRAL) {
+            plan.add_source(19, 0, 21, heat(1000, 10));
+            plan.add_source(0, 19, 21, heat(1000, 10));
+        } else if (state.rightTopBase == NEUTRAL && state.leftBottomBase == THEIRS) {
+            plan.add_source(19, 0, 21, heat(1000, 10));
+            plan.add_source(0, 19, 21, heat(1000, 10));
+        } else if (state.rightTopBase == OURS && state.leftBottomBase == THEIRS &&
+                closestEnemyToTopRight.type == getWinner(type) &&
+                distance(closestEnemyToTopRight.x, closestEnemyToTopRight.y, 0, 0) < 6)
+        {
+            plan.add_source(19, 0, 21, heat(1300, 10));
+        } else if (state.rightTopBase == THEIRS && state.leftBottomBase == OURS &&
+                closestEnemyToBottomLeft.type == getWinner(type) &&
+                distance(closestEnemyToBottomLeft.x, closestEnemyToBottomLeft.y, 0, 0) < 6)
+        {
+            plan.add_source(0, 19, 21, heat(1300, 10));
+        } else if (state.rightTopBase == OURS && state.leftBottomBase == OURS) {
+            if (closestEnemyToBottomLeft.type == getWinner(type) &&
+                distance(closestEnemyToBottomLeft.x, closestEnemyToBottomLeft.y, 0, 0) < 6)
+            {
+                plan.add_source(0, 19, 21, heat(1300, 10));
+            } else if (closestEnemyToTopRight.type == getWinner(type) &&
+                distance(closestEnemyToTopRight.x, closestEnemyToTopRight.y, 0, 0) < 6)
+            {
+                plan.add_source(19, 0, 21, heat(1300, 10));
+            }
 
-        //    }
-        //});
-
-        // OVERWRITE EVERYTHING. TODO remove
-
-        //  if (firstOurUnit != nullptr) {
-        //      if (firstOurUnit->type == type &&
-        //          (firstEnemyUnit == nullptr ||
-        //          getWinner(firstOurUnit->type) == firstEnemyUnit->type))
-        //      {
-        //          plan.add_source(0, 19, 20, heat(20));
-        //      }
-        //  }
-
-        plan.add_source(19, 19, 40, heat(300, 2));
-        plan.add_source(19, 0, 20, cool(20));
-        plan.add_source(0, 19, 20, cool(20));
+            plan.add_source(19, 19, 41, heat(1500, 15));
+        }
 
         forOurs([&](const Unit& u) {
-            plan.add_source(u.x, u.y, 0, cool(300));
+            plan.set(u.x, u.y, 0.0);
         });
 
         plans[type] = plan;
