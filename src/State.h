@@ -123,18 +123,17 @@ struct Weights {
         return d >= -0.0001 && d <= 0.0001;
     }
 
-    bool hasLessThan(int sx, int sy, double value) const {
-        if (sx >= 0 && values[sx-1][sy] <= value) {
-            return true;
-        }
-        if (sy >= 0 && values[sx][sy-1] <= value) {
-            return true;
-        }
-        if (sx < 19 && values[sx+1][sy] <= value) {
-            return true;
-        }
-        if (sy < 19 && values[sx][sy+1] <= value) {
-            return true;
+    bool shouldConsider(int sx, int sy, double value) const {
+        std::vector<double> v;
+        if (sx >= 0) { v.push_back(values[sx-1][sy]); }
+        if (sy >= 0) { v.push_back(values[sx][sy-1]); }
+        if (sx < 19) { v.push_back(values[sx+1][sy]); }
+        if (sy < 19) { v.push_back(values[sx][sy+1]); }
+
+        for (double d : v) {
+            if (d > value || !is_close_to_zero(d)) {
+                return true;
+            }
         }
         return false;
     }

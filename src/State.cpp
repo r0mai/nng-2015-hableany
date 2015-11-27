@@ -80,6 +80,7 @@ State State::fromParser(const PARSER& parser) {
         {
             switch(unit.type)
             {
+                default: break;
                 case ROCK: state.er++; break;
                 case PAPER: state.ep++; break;
                 case SCISSORS: state.es++; break;
@@ -89,6 +90,7 @@ State State::fromParser(const PARSER& parser) {
         {
             switch(unit.type)
             {
+                default: break;
                 case ROCK: state.ar++; break;
                 case PAPER: state.ap++; break;
                 case SCISSORS: state.as++; break;

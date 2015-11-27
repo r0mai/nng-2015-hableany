@@ -140,7 +140,7 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
     forOurs([&](const Unit& u) {
         const Weights& plan = plans[u.type];
         const Weights& instinct = instincts[u.type];
-        if (instinct.hasLessThan(u.x, u.y, -99.0)) {
+        if (instinct.shouldConsider(u.x, u.y, -99.0)) {
             auto ans = move(u, instinct.getWarmest(u.x, u.y));
             answer << ans;
             mDebugLog << "instinct " << ans;
