@@ -235,10 +235,16 @@ int State::getEnemyUnitSize(Type t)
 
 Type State::getAllyMaxUnitType()
 {
-	return (ar>as?(ar>ap?ROCK:PAPER):(as>ap?SCISSORS:PAPER));
+	if(ar>ap && ar>as) return ROCK;
+	if(as>ap && as>ar) return SCISSORS;
+	if(ap>as && ap>ar) return PAPER;
+	return EMPTY;
 	
 }
 Type State::getEnemyMaxUnitType()
 {
-	return (er>es?(er>ep?ROCK:PAPER):(es>ep?SCISSORS:PAPER));
+	if(er>ep && er>es) return ROCK;
+	if(es>ep && es>er) return SCISSORS;
+	if(ep>es && ep>er) return PAPER;
+	return EMPTY;
 }

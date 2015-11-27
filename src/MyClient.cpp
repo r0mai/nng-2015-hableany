@@ -150,31 +150,33 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
             mDebugLog << "plan " << ans;
         }
     });
+	
+	auto allyMaxUnitType = state.getAllyMaxUnitType();
 
     if (closestEnemyToBase.type != EMPTY)
     {
-        if(distance(0,0,closestEnemyToBase.x,closestEnemyToBase.y)<18)
-        {
-            auto ans = produce(getBeater(closestEnemyToBase.type));
-            answer << ans << ".";
-        }
-        else
-        {
-            if(state.getAllyMaxUnitType() == closestEnemyToBase.type)
-            {
-                auto ans = produce(getWinner(closestEnemyToBase.type));
-                answer << ans << ".";
-            }
-            else
-            {
-                auto ans = produce(getBeater(closestEnemyToBase.type));
-                answer << ans << ".";
-            }
-        }
+		if(allyMaxUnitType != EMPTY)
+		{
+			if(allyMaxUnitType == getBeater(closestEnemyToBase.type))
+			{
+				auto ans = produce(closestEnemyToBase.type);
+				answer << ans << ".";
+			}
+			else
+			{
+				auto ans = produce(getBeater(closestEnemyToBase.type));
+				answer << ans << ".";
+			}
+		}
+		else
+		{
+			auto ans = produce(getBeater(closestEnemyToBase.type));
+			answer << ans << ".";
+		}
     }
     else
     {
-        auto ans = produce(getWinner(state.getAllyMaxUnitType()));
+        auto ans = produce(typeFromInt(rand()%3));
         answer << ans << ".";
     }
     mDebugLog << answer.str() << std::endl;
