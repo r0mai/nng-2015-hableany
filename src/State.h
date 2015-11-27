@@ -1,6 +1,7 @@
 #pragma once
 
 #include <array>
+#include <vector>
 #include <ostream>
 
 #include "parser.h"
@@ -12,6 +13,7 @@ enum Type {
     SCISSORS
 };
 
+// order is important
 enum Direction {
     LEFT,
     RIGHT,
@@ -76,6 +78,17 @@ struct Weights {
                 }
             }
         }
+    }
+
+    Direction getWarmest(int sx, int sy) {
+        std::array<int, 4> adjacent = {
+            sx > 0 ? values[sx - 1][sy] : -1000000,
+            sx < 19 ? values[sx + 1][sy] : -1000000,
+            sy > 0 ? values[sx][sy - 1] : -1000000,
+            sy < 19 ? values[sx][sy + 1] : -1000000,
+        };
+        return Direction(std::max_element(adjacent.begin(), adjacent.end()) -
+                adjacent.begin());
     }
 
     std::array<std::array<int, 20>, 20> values;

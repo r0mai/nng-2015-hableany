@@ -23,16 +23,13 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
 
     /// --------------
 
-    Weights w;
-    w.add_source(5, 4, 20, [](int o, int d) { return o + (20 - d); });
-    w.add_source(15, 14, 20, [](int o, int d) { return o + (20 - d); });
+    Weights plan;
+    plan.add_source(19, 19, 40, [](int o, int d) {
+        return o + (40 - d);
+    });
 
-    forOurs([this](const Unit& u) {
-        if (u.x > u.y) {
-            answer << move(u, DOWN);
-        } else {
-            answer << move(u, RIGHT);
-        }
+    forOurs([&](const Unit& u) {
+        answer << move(u, plan.getWarmest(u.x, u.y));
     });
 
     answer << produce(typeFromInt(state.getOurTick() % 3));
@@ -41,7 +38,8 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
 
     /// --------------
 
-    mDebugLog << w << std::endl;
+    mDebugLog << "Plan:" << std::endl;
+    mDebugLog << plan << std::endl;
     mDebugLog << state << std::endl;
 
     printMatchResult(parser.match_result);
