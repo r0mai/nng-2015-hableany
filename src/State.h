@@ -12,6 +12,8 @@ enum Type {
     SCISSORS
 };
 
+std::string produce(Type t);
+
 struct Unit {
     int id = -1;
     bool is_enemy = false;

@@ -1,6 +1,15 @@
 #include <vector>
 #include "State.h"
 
+std::string produce(Type t) {
+    switch (t) {
+        case ROCK: return "prod R";
+        case PAPER: return "prod P";
+        case SCISSORS: return "prod S";
+        default: return "";
+    }
+}
+
 State State::fromParser(const PARSER& parser) {
     State state;
 
@@ -32,11 +41,21 @@ std::ostream& operator<<(std::ostream& os, const Unit& u) {
 }
 
 std::ostream& operator<<(std::ostream& os, const State& state) {
+    for (unsigned x = 0; x < 20 + 2; ++x) {
+        os << '-';
+    }
+    os << '\n';
     for (unsigned y = 0; y < 20; ++y) {
+        os << '|';
         for (unsigned x = 0; x < 20; ++x) {
             os << state.units[x][y];
         }
+        os << '|';
         os << '\n';
     }
+    for (unsigned x = 0; x < 20 + 2; ++x) {
+        os << '-';
+    }
+    os << '\n';
     return os;
 }
