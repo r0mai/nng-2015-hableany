@@ -43,6 +43,7 @@ protected:
     virtual std::string GetPreferredOpponents() = 0;
     virtual bool NeedDebugLog() = 0;
     std::ofstream mDebugLog;
+	std::ofstream kif;
 #ifdef WIN32
     SOCKET mConnectionSocket;
 #else

@@ -48,7 +48,7 @@ struct Unit {
 };
 
 struct State {
-    int tick;
+    int tick,ar,as,ap,er,es,ep;
 
     Ownership rightTopBase = NEUTRAL;
     Ownership leftBottomBase = NEUTRAL;

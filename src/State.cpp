@@ -56,6 +56,7 @@ Type typeFromInt(int i) {
 
 State State::fromParser(const PARSER& parser) {
     State state;
+	state.ar=state.as=state.ap=state.er=state.es=state.ep=0;
     state.tick = parser.tick;
     state.rightTopBase = parser.base_owner[0] == -1 ? NEUTRAL :
         (parser.base_owner[0] == 0 ? OURS : THEIRS);
@@ -70,10 +71,29 @@ State State::fromParser(const PARSER& parser) {
         unit.type = typeFromInt(s.t);
         unit.is_enemy = bool(s.side);
         state.units[s.x][s.y] = unit;
-		if(unit.is_enemy && unit.x == 19 && unit.y == 19 && unit.id > enemyLastId)
+		if(unit.is_enemy && unit.x == 19 && unit.y == 19 && unit.id > state.enemyLastId)
 		{
-			enemyLastId=unit.id;
-			enemyProductionTime++;
+			state.enemyLastId=unit.id;
+			state.enemyProductionTime++;
+		}
+		
+		if(unit.is_enemy)
+		{
+			switch(s.t)
+			{
+				case 0: er++; break;
+				case 1: ep++; break;
+				case 2: es++; break;
+			}
+		}
+		else
+		{
+			switch(s.t)
+			{
+				case 0: ar++; break;
+				case 1: ap++; break;
+				case 2: as++; break;
+			}
 		}
     }
 
