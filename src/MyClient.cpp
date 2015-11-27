@@ -74,16 +74,28 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
         } else if (state.rightTopBase == NEUTRAL && state.leftBottomBase == THEIRS) {
             plan.add_source(19, 0, 21, heat_max(1000, 10));
             plan.add_source(0, 19, 21, heat_max(1000, 10));
-        } else if (state.rightTopBase == OURS && state.leftBottomBase == THEIRS &&
-                closestEnemyToTopRight.type == getWinner(type) &&
+        } else if (state.rightTopBase == OURS &&
+            (state.leftBottomBase == THEIRS || state.leftBottomBase == NEUTRAL))
+        {
+            if (closestEnemyToTopRight.type == getWinner(type) &&
                 distance(closestEnemyToTopRight.x, closestEnemyToTopRight.y, 0, 0) < 6)
+            {
+                plan.add_source(19, 0, 21, heat_max(1300, 10));
+            } else {
+                plan.add_source(0, 19, 21, heat_max(1500, 10));
+                plan.add_source(19, 19, 21, heat_max(1400, 10));
+            }
+        } else if ((state.rightTopBase == THEIRS || state.rightTopBase == NEUTRAL) &&
+                state.leftBottomBase == OURS)
         {
-            plan.add_source(19, 0, 21, heat_max(1300, 10));
-        } else if (state.rightTopBase == THEIRS && state.leftBottomBase == OURS &&
-                closestEnemyToBottomLeft.type == getWinner(type) &&
+            if (closestEnemyToBottomLeft.type == getWinner(type) &&
                 distance(closestEnemyToBottomLeft.x, closestEnemyToBottomLeft.y, 0, 0) < 6)
-        {
-            plan.add_source(0, 19, 21, heat_max(1300, 10));
+            {
+                plan.add_source(0, 19, 21, heat_max(1300, 10));
+            } else {
+                plan.add_source(19, 0, 21, heat_max(1500, 10));
+                plan.add_source(19, 19, 21, heat_max(1400, 10));
+            }
         } else if (state.rightTopBase == OURS && state.leftBottomBase == OURS) {
             if (closestEnemyToBottomLeft.type == getWinner(type) &&
                 distance(closestEnemyToBottomLeft.x, closestEnemyToBottomLeft.y, 0, 0) < 6)
@@ -96,6 +108,8 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
             }
 
             plan.add_source(19, 19, 41, heat_max(1500, 15));
+        } else {
+            mDebugLog << "IMPOSSIBLE CASE" << std::endl;
         }
 
         forOurs([&](const Unit& u) {
