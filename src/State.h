@@ -12,6 +12,9 @@ enum Type {
     SCISSORS
 };
 
+// from 0, 1, 2
+Type typeFromInt(int i);
+
 std::string produce(Type t);
 
 struct Unit {
@@ -21,6 +24,10 @@ struct Unit {
 };
 
 struct State {
+    int tick;
+
+    int getOurTick() const;
+
     std::array<std::array<Unit, 20>, 20> units;
 
     static State fromParser(const PARSER& parser);

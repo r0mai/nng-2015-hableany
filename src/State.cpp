@@ -10,18 +10,27 @@ std::string produce(Type t) {
     }
 }
 
+Type typeFromInt(int i) {
+    return i == 0 ? ROCK : (i == 1 ? PAPER : SCISSORS);
+}
+
 State State::fromParser(const PARSER& parser) {
     State state;
+    state.tick = parser.tick;
 
     for (const auto& s : parser.soldiers) {
         Unit unit;
         unit.id = s.id;
-        unit.type = s.t == 0 ? ROCK : (s.t == 1 ? PAPER : SCISSORS);
+        unit.type = typeFromInt(s.t);
         unit.is_enemy = bool(s.side);
         state.units[s.x][s.y] = unit;
     }
 
     return state;
+}
+
+int State::getOurTick() const {
+    return tick / 2;
 }
 
 std::ostream& operator<<(std::ostream& os, const Unit& u) {
