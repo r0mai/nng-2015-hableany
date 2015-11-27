@@ -25,7 +25,7 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
     /// --------------
 
     Weights plan;
-    plan.add_source(19, 19, 40, [](int o, int d) { return o + (40 - d); });
+    plan.add_source(19, 19, 40, [](int o, int d) { return o + 2*(80 - d); });
     plan.add_source(0, 19, 20, [](int o, int d) { return o - (20 - d); });
     plan.add_source(19, 0, 20, [](int o, int d) { return o - (20 - d); });
 
@@ -59,7 +59,7 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
 
     /// --------------
 
-    mDebugLog << "Plan:" << std::endl;
+    // mDebugLog << "Plan:" << std::endl;
     mDebugLog << plan << std::endl;
     mDebugLog << state << std::endl;
 
