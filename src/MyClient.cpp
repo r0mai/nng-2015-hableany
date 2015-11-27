@@ -34,6 +34,7 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
     parser.Parse(ServerResponse);
 
     state = State::fromParser(parser);
+    fillTemporaryShit();
     answer.str("");
 
     /// --------------
@@ -62,6 +63,15 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
 
         // OVERWRITE EVERYTHING. TODO remove
 
+        if (firstOurUnit != nullptr) {
+            if (firstOurUnit->type == type &&
+                (firstEnemyUnit == nullptr ||
+                getWinner(firstOurUnit->type) == firstEnemyUnit->type))
+            {
+                plan.add_source(0, 19, 20, heat(20));
+            }
+        }
+
         plan.add_source(19, 19, 40, heat(300, 2));
         plan.add_source(19, 0, 20, cool(20));
         plan.add_source(0, 19, 20, cool(20));
@@ -85,6 +95,9 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
     }
 
     forOurs([&](const Unit& u) {
+        if (&u == firstOurUnit) {
+            return;
+        }
         const Weights& plan = plans[u.type];
         const Weights& instinct = instincts[u.type];
         if (instinct.hasNonZero(u.x, u.y)) {
@@ -94,7 +107,13 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
         }
     });
 
-    answer << produce(state.closestEnemyType());
+    Type closestEnemy = state.closestEnemyType();
+
+    if (closestEnemy != EMPTY) {
+        answer << produce(getWinner(closestEnemy));
+    } else {
+        answer << produce(PAPER);
+    }
     answer << ".";
     mDebugLog << answer.str() << std::endl;
 

@@ -43,5 +43,46 @@ protected:
         }
     }
 
+
+    Unit *findUnit(int id) {
+        for (unsigned y = 0; y < 20; ++y) {
+            for (unsigned x = 0; x < 20; ++x) {
+                if (state.units[x][y].type != EMPTY &&
+                    state.units[x][y].id == id)
+                {
+                    return &state.units[x][y];
+                }
+            }
+        }
+        return nullptr;
+    }
+
+    void fillTemporaryShit() {
+        if (firstOurId == -1) {
+            forOurs([&](const Unit& u) {
+                firstOurId = u.id;
+            });
+        }
+        if (firstEnemyId == -1) {
+            forEnemies([&](const Unit& u) {
+                firstEnemyId = u.id;
+            });
+        }
+        if (firstEnemyId == -1) {
+            return;
+        }
+        if (firstOurId == -1) {
+            return;
+        }
+        firstOurUnit = findUnit(firstOurId);
+        firstEnemyUnit = findUnit(firstEnemyId);
+    }
+
+    int firstOurId = -1;
+    int firstEnemyId = -1;
+
+    Unit *firstOurUnit = nullptr;
+    Unit *firstEnemyUnit = nullptr;
+
     std::stringstream answer;
 };
