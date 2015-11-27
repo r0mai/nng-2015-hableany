@@ -125,13 +125,13 @@ struct Weights {
 
     bool shouldConsider(int sx, int sy, double value) const {
         std::vector<double> v;
-        if (sx >= 0) { v.push_back(values[sx-1][sy]); }
-        if (sy >= 0) { v.push_back(values[sx][sy-1]); }
+        if (sx > 0) { v.push_back(values[sx-1][sy]); }
+        if (sy > 0) { v.push_back(values[sx][sy-1]); }
         if (sx < 19) { v.push_back(values[sx+1][sy]); }
         if (sy < 19) { v.push_back(values[sx][sy+1]); }
 
         for (double d : v) {
-            if (d > value || !is_close_to_zero(d)) {
+            if (d > value && !is_close_to_zero(d)) {
                 return true;
             }
         }
