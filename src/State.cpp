@@ -78,20 +78,20 @@ State State::fromParser(const PARSER& parser) {
         }
         if(unit.is_enemy)
         {
-            switch(s.t)
+            switch(unit.type)
             {
-                case 0: state.er++; break;
-                case 1: state.ep++; break;
-                case 2: state.es++; break;
+                case ROCK: state.er++; break;
+                case PAPER: state.ep++; break;
+                case SCISSORS: state.es++; break;
             }
         }
         else
         {
-            switch(s.t)
+            switch(unit.type)
             {
-                case 0: state.ar++; break;
-                case 1: state.ap++; break;
-                case 2: state.as++; break;
+                case ROCK: state.ar++; break;
+                case PAPER: state.ap++; break;
+                case SCISSORS: state.as++; break;
             }
         }
     }
