@@ -119,6 +119,15 @@ std::ostream& operator<<(std::ostream& os, const Unit& u) {
     return os;
 }
 
+std::ostream& operator<<(std::ostream& os, const Ownership& o) {
+    switch (o) {
+        case NEUTRAL: os << '.'; break;
+        case OURS: os << 'B'; break;
+        case THEIRS: os << 'b'; break;
+    }
+    return os;
+}
+
 std::ostream& operator<<(std::ostream& os, const State& state) {
     for (unsigned x = 0; x < 20 + 2; ++x) {
         os << '-';
@@ -127,7 +136,17 @@ std::ostream& operator<<(std::ostream& os, const State& state) {
     for (unsigned y = 0; y < 20; ++y) {
         os << '|';
         for (unsigned x = 0; x < 20; ++x) {
-            os << state.units[x][y];
+            if (state.units[x][y].type == EMPTY) {
+                if (x == 19 && y == 0) {
+                    os << state.rightTopBase;
+                } else if (x == 0 && y == 19) {
+                    os << state.leftBottomBase;
+                } else {
+                    os << state.units[x][y];
+                }
+            } else {
+                os << state.units[x][y];
+            }
         }
         os << '|';
         os << '\n';
