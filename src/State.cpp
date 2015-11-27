@@ -179,8 +179,27 @@ Type State::closestEnemyType()
 			}
 		}
 	}
-    
-    
-    
     return units[x][y].type;
+}
+
+int State::getAllyUnitSize(Type t)
+{
+	switch(t)
+	{
+		case EMPTY: return -1; break;
+		case ROCK: return ar; break;
+		case PAPER: return ap; break;
+		case SCISSORS: return as; break;
+	}
+}
+
+int getEnemyUnitSize(Type t)
+{
+	switch(t)
+	{
+		case EMPTY: return -1; break;
+		case ROCK: return er; break;
+		case PAPER: return ep; break;
+		case SCISSORS: return es; break;
+	}
 }

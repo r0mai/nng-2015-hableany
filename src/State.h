@@ -63,6 +63,9 @@ struct State {
     int enemyLastId;
 
     Type closestEnemyType();
+	//Type getProductionType();
+	int getAllyUnitSize(Type t);
+	int getEnemyUnitSize(Type t);
 };
 
 std::string produce(Type t);
