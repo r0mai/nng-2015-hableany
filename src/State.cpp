@@ -85,3 +85,28 @@ std::ostream& operator<<(std::ostream& os, const State& state) {
     os << '\n';
     return os;
 }
+
+void Weights::fill(int fill_value) {
+    for (auto& column : values) {
+        for (int& value : column) {
+            value = fill_value;
+        }
+    }
+}
+
+void Weights::set(int x, int y, int value) {
+    if (x < 0 || x >= 20 || y < 0 || y >= 20) {
+        return;
+    }
+    values[x][y] = value;
+}
+
+std::ostream& operator<<(std::ostream& os, const Weights& w) {
+    for (unsigned y = 0; y < 20; ++y) {
+        for (unsigned x = 0; x < 20; ++x) {
+            os << (w.values[x][y] % 10);
+        }
+        os << '\n';
+    }
+    return os;
+}

@@ -33,6 +33,11 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
     answer << ".";
     mDebugLog << answer.str() << std::endl;
 
+    Weights w;
+    w.add_source(5, 4, 20, [](int o, int d) { return o + (20 - d); });
+    w.add_source(15, 14, 20, [](int o, int d) { return o + (20 - d); });
+
+    mDebugLog << w << std::endl;
     mDebugLog << state << std::endl;
 
     printMatchResult(parser.match_result);
