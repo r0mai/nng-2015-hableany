@@ -28,6 +28,12 @@ enum Direction {
     STAY
 };
 
+enum Ownership {
+    NEUTRAL,
+    OURS,
+    THEIRS
+};
+
 std::string toString(Direction d);
 
 // from 0, 1, 2
@@ -43,6 +49,9 @@ struct Unit {
 
 struct State {
     int tick;
+
+    Ownership rightTopBase = NEUTRAL;
+    Ownership leftBottomBase = NEUTRAL;
 
     int getOurTick() const;
 

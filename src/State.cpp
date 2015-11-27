@@ -57,6 +57,10 @@ Type typeFromInt(int i) {
 State State::fromParser(const PARSER& parser) {
     State state;
     state.tick = parser.tick;
+    state.rightTopBase = parser.base_owner[0] == -1 ? NEUTRAL :
+        (parser.base_owner[0] == 0 ? OURS : THEIRS);
+    state.leftBottomBase = parser.base_owner[1] == -1 ? NEUTRAL :
+        (parser.base_owner[1] == 0 ? OURS : THEIRS);
 
     for (const auto& s : parser.soldiers) {
         Unit unit;
