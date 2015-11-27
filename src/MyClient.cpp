@@ -15,15 +15,15 @@ void printMatchResult(PARSER::eMatchResult r) {
     }
 }
 
-std::function<int(int, int)> heat(int amount) {
+std::function<int(int, int)> heat(int amount, int slope = 1) {
     return [=](int o, int d) {
-        return o + (amount - d);
+        return o + slope*(amount - d);
     };
 }
 
-std::function<int(int, int)> cool(int amount) {
+std::function<int(int, int)> cool(int amount, int slope = 1) {
     return [=](int o, int d) {
-        return o - (amount - d);
+        return o - slope*(amount - d);
     };
 }
 
@@ -62,9 +62,9 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
 
         // OVERWRITE EVERYTHING. TODO remove
 
-        plan.add_source(19, 19, 40, heat(700));
-        plan.add_source(19, 0, 20, cool(50));
-        plan.add_source(0, 19, 20, cool(50));
+        plan.add_source(19, 19, 40, heat(300, 2));
+        plan.add_source(19, 0, 20, cool(20));
+        plan.add_source(0, 19, 20, cool(20));
 
         plans[type] = plan;
     }
