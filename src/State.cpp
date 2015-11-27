@@ -157,7 +157,7 @@ void Weights::set(int x, int y, int value) {
 std::ostream& operator<<(std::ostream& os, const Weights& w) {
     for (unsigned y = 0; y < 20; ++y) {
         for (unsigned x = 0; x < 20; ++x) {
-            os << (w.values[x][y] % 10);
+            os << w.values[x][y] << ' ';
         }
         os << '\n';
     }

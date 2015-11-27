@@ -16,13 +16,13 @@ void printMatchResult(PARSER::eMatchResult r) {
 }
 
 std::function<int(int, int)> heat(int amount) {
-    return [&](int o, int d) {
+    return [=](int o, int d) {
         return o + (amount - d);
     };
 }
 
 std::function<int(int, int)> cool(int amount) {
-    return [&](int o, int d) {
+    return [=](int o, int d) {
         return o - (amount - d);
     };
 }
@@ -41,31 +41,30 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
     std::map<Type, Weights> plans;
     for (Type type : {ROCK, PAPER, SCISSORS}) {
         Weights plan;
-        plan.add_source(19, 19, 40, heat(700));
+        //plan.add_source(19, 19, 40, heat(700));
 
-        if (state.rightTopBase == NEUTRAL) {
-            plan.add_source(19, 0, 20, heat(400));
-        } else if (state.rightTopBase == THEIRS) {
-            plan.add_source(19, 0, 20, heat(400));
-        } else {
-            plan.add_source(19, 0, 20, cool(400));
-        }
-        forEnemies([&](const Unit& u) {
-            if (u.type == getWinner(type)) {
+        //if (state.rightTopBase == NEUTRAL) {
+        //    plan.add_source(19, 0, 20, heat(400));
+        //} else if (state.rightTopBase == THEIRS) {
+        //    plan.add_source(19, 0, 20, heat(400));
+        //} else {
+        //    plan.add_source(19, 0, 20, cool(400));
+        //}
+        //forEnemies([&](const Unit& u) {
+        //    if (u.type == getWinner(type)) {
 
-            } else if (u.type == getBeater(type)) {
-                plan.add_source(u.x, u.y, 15, cool(30));
-            } else {
+        //    } else if (u.type == getBeater(type)) {
+        //        plan.add_source(u.x, u.y, 15, cool(30));
+        //    } else {
 
-            }
-        });
+        //    }
+        //});
 
         // OVERWRITE EVERYTHING. TODO remove
 
-        plan = Weights();
         plan.add_source(19, 19, 40, heat(700));
-        plan.add_source(19, 0, 20, cool(400));
-        plan.add_source(0, 19, 20, cool(400));
+        plan.add_source(19, 0, 20, cool(50));
+        plan.add_source(0, 19, 20, cool(50));
 
         plans[type] = plan;
     }
@@ -75,9 +74,9 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
         Weights instinct;
         forEnemies([&](const Unit& u) {
             if (u.type == getWinner(type)) {
-                instinct.add_source(u.x, u.y, 4, [](int o, int d) { return o + (4 - d); });
+                instinct.add_source(u.x, u.y, 4, heat(4));
             } else if (u.type == getBeater(type)) {
-                instinct.add_source(u.x, u.y, 4, [](int o, int d) { return o - (4 - d); });
+                instinct.add_source(u.x, u.y, 4, cool(4));
             } else {
 
             }
@@ -89,7 +88,7 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
         const Weights& plan = plans[u.type];
         const Weights& instinct = instincts[u.type];
         if (instinct.hasNonZero(u.x, u.y)) {
-            answer << move(u, plan.getWarmest(u.x, u.y));
+            answer << move(u, instinct.getWarmest(u.x, u.y));
         } else {
             answer << move(u, plan.getWarmest(u.x, u.y));
         }
@@ -103,6 +102,7 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
 
     // mDebugLog << "Plan:" << std::endl;
     mDebugLog << plans[ROCK] << std::endl;
+    mDebugLog << instincts[ROCK] << std::endl;
     mDebugLog << state << std::endl;
 
     kif << "{";
