@@ -183,7 +183,7 @@ std::ostream& operator<<(std::ostream& os, const Weights& w) {
     return os;
 }
 
-Unit State::closestEnemyType()
+Unit State::closestEnemy()
 {
     int x=19,y=19;
 
