@@ -164,7 +164,7 @@ std::ostream& operator<<(std::ostream& os, const Weights& w) {
     return os;
 }
 
-Type State::closestEnemyType()
+Unit State::closestEnemyType()
 {
     int x=19,y=19;
 
@@ -179,7 +179,7 @@ Type State::closestEnemyType()
             }
         }
     }
-    return units[x][y].type;
+    return units[x][y];
 }
 
 int State::getAllyUnitSize(Type t)
@@ -202,4 +202,14 @@ int State::getEnemyUnitSize(Type t)
         case PAPER: return ep; break;
         case SCISSORS: return es; break;
     }
+}
+
+Type State::getAllyMaxUnitType()
+{
+	return (ar>as?(ar>ap?ROCK:PAPER):(as>ap?SCISSORS:PAPER));
+	
+}
+Type State::getEnemyMaxUnitType()
+{
+	return (er>es?(er>ep?ROCK:PAPER):(es>ep?SCISSORS:PAPER));
 }
