@@ -94,7 +94,7 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
         }
     });
 
-    answer << produce(typeFromInt(state.getOurTick() % 3));
+    answer << produce(state.closestEnemyType());
     answer << ".";
     mDebugLog << answer.str() << std::endl;
 
@@ -113,9 +113,14 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
         for(int j=0;j<state.units[i].size();++j)
         {
             kif << "{ ";
-            kif << "\"unit\": " << state.units[j][i] << ",";
-            kif << "\"weight\": " << plans[ROCK].values[j][i];
+            kif << "\"unit\": \"" << state.units[j][i] << "\",";
+            kif << "\"weight\": ";
+			kif << "{";
+			kif << "\"rock\": " << plans[ROCK].values[j][i] << ",";
+			kif << "\"paper\": " << plans[PAPER].values[j][i] << ",";
+			kif << "\"scissors\": " << plans[SCISSORS].values[j][i];
             kif << "}";
+			kif << "}";
             if(j<state.units[i].size()-1) kif << ",";
         }
         kif << "]";
