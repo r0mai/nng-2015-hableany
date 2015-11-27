@@ -3,6 +3,7 @@
 #include "parser.h"
 #include "State.h"
 
+#include <map>
 
 void printMatchResult(PARSER::eMatchResult r) {
     switch (r) {
@@ -28,8 +29,28 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
     plan.add_source(0, 19, 20, [](int o, int d) { return o - (20 - d); });
     plan.add_source(19, 0, 20, [](int o, int d) { return o - (20 - d); });
 
+    std::map<Type, Weights> instincts;
+    for (Type type : {ROCK, PAPER, SCISSORS}) {
+        Weights instinct;
+        forEnemies([&](const Unit& u) {
+            if (u.type == getWinner(type)) {
+                instinct.add_source(u.x, u.y, 4, [](int o, int d) { return o + (4 - d); });
+            } else if (u.type == getBeater(type)) {
+                instinct.add_source(u.x, u.y, 4, [](int o, int d) { return o - (4 - d); });
+            } else {
+                //same
+            }
+        });
+        instincts[type] = instinct;
+    }
+
     forOurs([&](const Unit& u) {
-        answer << move(u, plan.getWarmest(u.x, u.y));
+        const Weights& instinct = instincts[u.type];
+        if (instinct.hasNonZero(u.x, u.y)) {
+            answer << move(u, instinct.getWarmest(u.x, u.y));
+        } else {
+            answer << move(u, plan.getWarmest(u.x, u.y));
+        }
     });
 
     answer << produce(typeFromInt(state.getOurTick() % 3));

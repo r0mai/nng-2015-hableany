@@ -1,6 +1,27 @@
 #include <vector>
+#include <cassert>
 #include <string>
 #include "State.h"
+
+// returns what defeats t
+Type getBeater(Type t) {
+    switch (t) {
+        case ROCK: return PAPER;
+        case PAPER: return SCISSORS;
+        case SCISSORS: return ROCK;
+        default: assert(false); return PAPER;
+    }
+}
+
+// returns over what t wins
+Type getWinner(Type t) {
+    switch (t) {
+        case PAPER: return ROCK;
+        case SCISSORS: return PAPER;
+        case ROCK: return SCISSORS;
+        default: assert(false); return PAPER;
+    }
+}
 
 std::string produce(Type t) {
     switch (t) {
@@ -17,12 +38,16 @@ std::string toString(Direction d) {
         case RIGHT: return "right";
         case UP: return "up";
         case DOWN: return "down";
+        case STAY: return "";
     }
     return "";
 }
 
 std::string move(const Unit& u, Direction dir) {
-    return std::to_string(u.id) + " " + toString(dir) + "\n";
+    if (dir != STAY) {
+        return std::to_string(u.id) + " " + toString(dir) + "\n";
+    }
+    return "";
 }
 
 Type typeFromInt(int i) {

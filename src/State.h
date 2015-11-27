@@ -13,12 +13,19 @@ enum Type {
     SCISSORS
 };
 
+// returns what defeats t
+Type getBeater(Type t);
+
+// returns over what t wins
+Type getWinner(Type t);
+
 // order is important
 enum Direction {
     LEFT,
     RIGHT,
     UP,
-    DOWN
+    DOWN,
+    STAY
 };
 
 std::string toString(Direction d);
@@ -80,15 +87,35 @@ struct Weights {
         }
     }
 
-    Direction getWarmest(int sx, int sy) {
-        std::array<int, 4> adjacent = {
+    Direction getWarmest(int sx, int sy) const {
+        std::array<int, 5> adjacent = {
             sx > 0 ? values[sx - 1][sy] : -1000000,
             sx < 19 ? values[sx + 1][sy] : -1000000,
             sy > 0 ? values[sx][sy - 1] : -1000000,
             sy < 19 ? values[sx][sy + 1] : -1000000,
+            values[sx][sy]
         };
         return Direction(std::max_element(adjacent.begin(), adjacent.end()) -
                 adjacent.begin());
+    }
+
+    bool hasNonZero(int sx, int sy) const {
+        if (sx >= 0 && values[sx-1][sy] != 0) {
+            return true;
+        }
+        if (sy >= 0 && values[sx][sy-1] != 0) {
+            return true;
+        }
+        if (sx < 19 && values[sx+1][sy] != 0) {
+            return true;
+        }
+        if (sy < 19 && values[sx][sy+1] != 0) {
+            return true;
+        }
+        if (values[sx][sy] != 0) {
+            return true;
+        }
+        return false;
     }
 
     std::array<std::array<int, 20>, 20> values;
