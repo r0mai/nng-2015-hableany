@@ -109,7 +109,7 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
     if (closestEnemy != EMPTY) {
         answer << produce(getBeater(closestEnemy));
     } else {
-        answer << produce(PAPER);
+        answer << produce(typeFromInt(rand() % 3));
     }
     answer << ".";
     mDebugLog << answer.str() << std::endl;

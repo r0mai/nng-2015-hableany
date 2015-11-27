@@ -1,7 +1,10 @@
 #include "MyClient.h"
+#include <cstdlib>
+#include <ctime>
 
 int main(int argc, char* argv[])
 {
+    std::srand(time(nullptr));
     std::cout.sync_with_stdio(false);
     std::string server_address;
     if (argc<2)
