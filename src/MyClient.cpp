@@ -95,9 +95,6 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
     }
 
     forOurs([&](const Unit& u) {
-        if (&u == firstOurUnit) {
-            return;
-        }
         const Weights& plan = plans[u.type];
         const Weights& instinct = instincts[u.type];
         if (instinct.hasNonZero(u.x, u.y)) {
