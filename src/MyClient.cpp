@@ -60,6 +60,12 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
             }
         });
 
+        // OVERWRITE EVERYTHING. TODO remove
+
+        plan = Weights();
+        plan.add_source(19, 19, 40, heat(700));
+        plan.add_source(19, 0, 20, cool(400));
+        plan.add_source(0, 19, 20, cool(400));
 
         plans[type] = plan;
     }
@@ -98,7 +104,7 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
     // mDebugLog << "Plan:" << std::endl;
     mDebugLog << plans[ROCK] << std::endl;
     mDebugLog << state << std::endl;
-	
+
 	kif << "{";
 	kif << "\"grid\": [";
 	for(int i=0;i<state.units.size();++i)
@@ -118,7 +124,7 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
 	kif << "],";
 	kif << "\"tick\":" << state.tick;
 	kif << "},";
-	
+
 
     printMatchResult(parser.match_result);
     return answer.str();

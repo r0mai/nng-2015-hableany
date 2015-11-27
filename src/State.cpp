@@ -70,10 +70,10 @@ State State::fromParser(const PARSER& parser) {
         unit.type = typeFromInt(s.t);
         unit.is_enemy = bool(s.side);
         state.units[s.x][s.y] = unit;
-		if(unit.is_enemy && unit.x == 19 && unit.y == 19 && unit.id > enemyLastId)
+		if(unit.is_enemy && unit.x == 19 && unit.y == 19 && unit.id > state.enemyLastId)
 		{
-			enemyLastId=unit.id;
-			enemyProductionTime++;
+			state.enemyLastId=unit.id;
+			state.enemyProductionTime++;
 		}
     }
 
