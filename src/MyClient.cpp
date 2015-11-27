@@ -117,6 +117,9 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
 
             }
         });
+        forOurs([&](const Unit& u) {
+            instinct.set(u.x, u.y, 0.0);
+        });
         instincts[type] = instinct;
     }
 
