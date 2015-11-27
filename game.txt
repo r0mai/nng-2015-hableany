@@ -1,0 +1,96 @@
+﻿Rock Paper Scissor
+
+A real-time stratégia játékot általában a kő-papír-olló játékra épülnek, csak az egységeket trükkösen Siege Tank-nek, Ogre-nek, vagy Carrotpult-nak álcázzák. Az egyszerűség kedvéért ebben a játékban nem álcázunk semmit... kő, papír és olló egységeket lehet gyártani, és azokkal harcolni.
+
+A meccsek egy 20x20-as arénában zajlanak, ahol mindig 2 játékos küzd egymás ellen. 2 átellenes sarokban vannak a gyárak, egységeket csak itt lehet termelni. A másik 2 sarokban elfoglalható bázisok vannak, amelyek gyorsítják a termelést. A cél az ellenfél gyárának elfoglalása.
+
+Egy központi szerveren keresztül lehet csatázni, kliens programokkal. A kliensek felváltva lépnek, ezért valójában nem is igaz, hogy real-time. A kliens a szervertől egy teljes állapotot kap, amire válaszként az összes csapatmozgást és gyártást egy csomagban elküldi. A szerver ennek végrehajtása után az ellenfélnek küldi az állapotot, ők válaszolnak rá, és így tovább.
+
+Az egységek a 4 alapirányba tudnak lépni. Ha ellenséges egységre lépnek, a kő-papír-olló játék alapján küzdenek meg, vagyis kő üti az ollót, olló üti a papírt, és papír üti a követ. A nyertes egység megmarad, a vesztes eltűnik. Egyforma egységek esetén mindkét egység eltűnik.
+Barát egységgel vagy fallal ütközés esetén nem mozog az egység. Egy tickben minden egységgel egyszer lehet mozogni. Ha nincs parancs egy egységre, akkor az helyben marad. A kiadott parancsokat a szerver sorrendben hajtja végre, ez csapatmozgásnál fontos lehet. Például 2 egymás melletti egységet úgy lehet jobbra mozgatni, ha előbb a jobb oldali lép. Máskülönben a baloldali előbb beleütközne a jobboldaliba, és csak a jobboldali lépne utána odébb.
+
+Az egységek gyártása változó ideig tart. Az első egység legyártása 10 tickig tart, a következő 11, aztán 12, satöbbi. Ezt módosíthatja egy vagy két elfoglalt plusz bázis, 0.75-ös és 0.5-ös szorzóval, lefele kerekítve. Például a 3. és 4. egységet 1 elfoglalt plusz bázissal 9 tickig tart legyártani. A gyártott egység csak akkor jelenik meg, ha a gyáron nem áll se baráti, se ellenséges egység, különben csak a számláló növekszik. Ha menet közben változik a gyártott egység típusa, az előző egységre fordított tickek nem vesznek el, vissza lehet térni azok gyártására (3 külön számláló van a 3 típushoz). Amikor megjelenik egy elkészült egység, az összes ráfordított tick nullázódik. Az egységek gyártásához csak a saját körödben gyűlnek a tick-ek, tehát az első egységed a 11. fogadott csomagban fog megjelenni. A tickek 1-ről indulnak, ezért ebben a csomagban "tick 21" vagy "tick 22" lesz olvasható. Ha te kezdtél, az ellenfeled már a "tick 20"-ban látni fogja, hogy mit gyártottál.
+
+Egy plusz bázist úgy lehet elfoglalni, ha rálépsz egy egységgel. Utána azzal az egységgel elmehetsz onnét, a bázis mindaddig a tiéd marad, amíg az ellenfél el nem foglalja.
+
+Úgy tudsz nyerni, ha elfoglalod az ellenfél gyárát egy egységgel, és rajta tudsz maradni 20 ticken keresztül. Ha nincs egysége az arénában, akkor nem kell kivárni a 20 ticket, azonnal nyersz, mert ilyenkor nem tud gyártani sem.
+
+Döntetlen is lehet az eredmény, ha 4000 tick után még nincs nyertes.
+
+A te gyárad mindig a 0,0 koordinátán van, ez a bal felső koordináta. A protokollban az átellenes oldalon játszó kliensnek minden tükrözve van, hogy mindketten a 0,0 pontból indulhassatok. Az egységeknek egyedi azonosítójuk van, ez alapján lehet nekik parancsot adni, ami lehet {left, right, up, down}. Az egységek típusának betűjele R, P, S (rendre kő, papír, olló). A 2 plusz bázis neve "r" (jobbra lévő) és "d" (lefele lévő). A barát betűjele "A" (ally), az ellenségé "E" (enemy), illetve a plusz bázisok tudnak semlegesek is lenni: "N" (neutral).
+
+Egy szerver csomag így néz ki:
+
+tick <szám>
+versus <ellenfél id vagy "bot">
+soldiers <hány egység van összesen>
+ezután minden egységhez egy sor tartozik:
+<id> <barát vagy ellenség> <típus> <x> <y>
+ezután a 2 plusz bázis:
+base r <barát, ellenség vagy semleges>
+base d <barát, ellenség vagy semleges>
+végül a gyártás állapota, a plusz bázisok által nem módosított gyártási idő, és a típusokhoz tartozó tick számláló:
+prod <gyártási idő> <kő> <papír> <olló>
+meccs végét ez jelzi:
+finished <victory, defeat vagy draw>
+.
+
+A csomagot egy külön sorban álló pont zárja le. A példakliensben lévő PARSER osztály ezt mind feldolgozza.
+A válasz csomagban mozgatások és a gyártás típusa álljon:
+mozgatás:
+<id> <irány>
+gyártás:
+prod <típus>
+A válasz csomagot is egy ponttal kell lezárni. A válaszadásra 250ms áll rendelkezésre.
+
+Pl: (debug.log-ban loggolja ezeket)
+tick 117
+soldiers 7
+1 A R 1 0
+3 A P 1 12
+4 E S 2 1
+5 A P 13 12
+6 E P 6 7
+7 A P 11 1
+8 E R 14 13
+base r N
+base d N
+prod 14 4 6 6
+.
+
+Válasz:
+5 right
+7 right
+3 down
+prod P
+.
+
+A pontozásról:
+Kétféle pontozás is van, a meccspont, és az Élő-pont. Meccspontot csak tétre menő mérkőzéseken lehet szerezni. Ez most egy hosszú verseny, ezért kétszer is lesz közös verseny nézés az AudMax-ban! Először délután 16:00-kor, másodszor pedig a végén, este 21:00-kor. Mindkét alkalommal körmérkőzés lesz, mindenki mindenki ellen fog egy meccset játszani. A délutáni meccseken minden nyerésért 2 meccspont, döntetlenekért 1 jár. Az esti meccseken a nyerésekért 10, döntetlenért 5 meccspont jár. A végén a meccspontok alapján az első 4 helyezett kliens még egy körmérkőzés keretében játszik egymással, szintén 10 (döntetlenért 5) meccspontért. Az nyer, akinek összesen a legtöbb meccspontja van. Döntetlen esetén a magasabb Élő-pont is számít.
+
+A körmérkőzéseken kívül verseny közben bármikor lehet a szerverhez csatlakozni, és botok vagy más játékosok ellen játszani. Meccspontok ezekért a mérkőzésekért nem járnak, helyette az Élő-pontrendszer alapján kaptok vagy veszítetek pontokat.
+Az Élő-pontokról itt olvashattok: https://hu.wikipedia.org/wiki/%C3%89l%C5%91-pontrendszer
+Az épp aktuális Élő-pont listát minden csatlakozáskor automatikusan megkapjátok, és lehet akár az ellenfélválasztási stratégia része is.
+
+A MYCLIENT::GetPreferredOpponents-szel vezérelhető, hogy milyen ellenfelek ellen akarsz játszani. Space-szel elválasztott id lista adható meg, vagy "any", ha bármelyik jó. Ezen kívül választható "bot" is, ez nagyon primitív, de a szerver irányítja, és így mindig rendelkezésre áll. Az Élő-pontot a bot elleni meccs nem befolyásolja. Az "any"-nél nem fog "bot"-ot adni. Lehet üres is a lista, de a körmérkőzések alatt amúgy se fog más meccset inditani.
+
+Érdemes játszatni a klienseiteket. Te és ellenfeled is előnyhöz jut a mezőny többi versenyzőjéhez képest, mert több féle helyzetre tudjátok felkészíteni és jobban tudjátok teszteni. Igazi ellenfelek elleni meccsek után (legalább) 10 másodperc pihenő van, ha nem akartok új ellenfelet, ilyenkor leállíthatjátok a klienseteket.
+
+A kezdőjátékosnak (aki a "tick 1"-et kapja) van egy pici előnye, ezért a meccspontokért vívott küzdelemben az kezd, akinek magasabb az Élő-pontja. Egyéb meccseken véletlenszerű, hogy ki kezd.
+
+Van pár parancs, amit a példakliens lekezel, ezért nem kell vele foglalkozni, de a teljesség kedvéért:
+bejelentkezés: login <jelszó>, erre válasz "fail" vagy "ping". A jelszó a MYCLIENT::GetPassword-ben van, személyre szabottan kapjátok.
+"ping" kb percenként jön meccsen kívül.
+Bármikor küldhető "opponent <id> <id>..." lista, a példakliens csak login után küldi el a MYCLIENT::GetPreferredOpponents alapján.
+
+Debug:
+A debug.log-ból ha kiszedsz egy szerver csomagot, és test.txt-ként a kliens mellé másolod, akkor induláskor meghívja ezzel a HandleServerResponse-t, mintha csak a szervertől jött volna, és kiírja a választ a konzolra. Tehát ha furcsán viselkedik a kliensed, állítsd meg, a debug.log végéről másold be a hibát okozó csomagot a test.txt-be, és tudod debuggolni.
+
+Néhány speciális eset:
+Előfordulhat, hogy egy elfoglalt plusz bázis miatt gyorsított termeléssel elkészült egység nem tud megjelenni, aztán pedig elveszik a bázis, mire üres lesz a gyár. A korábban elkészült egység nem fog azonnal megjelenni, csak amikor az elvesztett bázis gyorsítása nélküli gyártási idő le nem telik.
+
+Trükkösen le lehet gyártani 3 különböző egységet majdnem egyszerre, váltogatva a gyártást. Például kezdéskor minden egységbe 9 tick-et felhalmozva a 28. tickben fog megjelenni az első, a 30.-ban a második (mivel ennek már 11 tickig tart a gyártása), és a 33.-ban a harmadik (9 már fel volt halmozva a 12-ből).
+
+Miközben elfoglaltad az ellenfél gyárát, és vársz a 20 tickes számlálóra, leléphetsz róla, ha ugyan abban a tick-ben egy másik egységgel rálépsz, így nem nullázódik a számláló.
+
+Ha a játék a te lépésed után ér véget, akkor a következő játékállapotot te is megkapod, nemcsak az ellenfél. Emiatt a "tick"-ben más lesz a paritás, mint előtte.
