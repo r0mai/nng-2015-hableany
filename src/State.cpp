@@ -166,21 +166,21 @@ std::ostream& operator<<(std::ostream& os, const Weights& w) {
 
 Type State::closestEnemyType()
 {
-    Type t=EMPTY;
-
-    int i=0,j=0;
-    while(j < 20 && !units[j][i].is_enemy)
-    {
-        if(j == 0)
-        {
-            j=i+1;
-            i=0;
-        }
-        j--;
-        i++;
-    }
-    if(units[j][i].is_enemy)
-        t=units[j][i].type;
-
-    return t;
+    int x=19,y=19;
+	
+	for(int i=0;i<units.size();++i)
+	{
+		for(int j=0;j<units[i].size();++j)
+		{
+			if(units[j][i].is_enemy && distance(0,0,x,y)>distance(0,0,j,i))
+			{
+				x=j;
+				y=i;
+			}
+		}
+	}
+    
+    
+    
+    return units[x][y].type;
 }
