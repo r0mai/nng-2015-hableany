@@ -90,7 +90,7 @@ std::string MyClient::HandleServerResponse(std::vector<std::string> &ServerRespo
         Weights instinct;
         forEnemies([&](const Unit& u) {
             if (u.type == getWinner(type)) {
-                instinct.add_source(u.x, u.y, 4, heat(4));
+                instinct.add_source(u.x, u.y, 4, heat(4.1));
             } else if (u.type == getBeater(type)) {
                 instinct.add_source(u.x, u.y, 4, cool(4));
             } else {
